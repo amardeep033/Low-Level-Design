@@ -1,0 +1,67 @@
+Strategy Pattern allows selecting an algorithm (or behavior) at runtime.
+It defines a family of algorithms, encapsulates each one, and makes them interchangeable — without changing the context code.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+If few child has similar behaviour, then code repeatation
+vehicle(drive)---|>  sporty(special_drive), passenger(default), offroad(special_drive)
+define new trait drive strategy ---|>  drive, special_drive
+now vehicle ----> drive strategy
+child define which strategy to use --> vehicle will dispatch dyn using trait object
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+Note1: Open/Closed Principle (OCP) example makes use of Strategy Pattern
+Note 2: ---|> is a (inheritence), ----> has a (trait)
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+1. Strategy Trait
+trait DriveStrategy {
+    fn drive(&self);
+}
+
+2.1 Concrete Strategies
+struct DefaultDrive;
+impl DriveStrategy for DefaultDrive {
+    fn drive(&self) {
+        println!("Driving like a normal passenger car");
+    }
+}
+
+2.2 Concrete Strategies
+struct SpecialDrive;
+impl DriveStrategy for SpecialDrive {
+    fn drive(&self) {
+        println!("Driving like a special car!");
+    }
+}
+
+3. Vehicle uses Strategy (has-a relation)
+struct Vehicle {
+    drive_strategy: Box<dyn DriveStrategy>,
+}
+impl Vehicle {
+    fn drive(&self) {
+        self.drive_strategy.drive();
+    }
+}
+
+
+4. Create vehicles with different behaviors
+fn main() {
+    let sporty_car = Vehicle { drive_strategy: Box::new(SpecialDrive) };
+    let family_car = Vehicle { drive_strategy: Box::new(DefaultDrive) };
+    let jeep = Vehicle { drive_strategy: Box::new(SpecialDrive) };
+
+    sporty_car.drive();  // prints: Driving like a special car!
+    family_car.drive();  // prints: Driving like a normal passenger car
+    jeep.drive();        // prints: Driving like a special car!
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+This is a Strategy Pattern, and it also demonstrates:
+
+✅ Open/Closed Principle:
+Vehicle doesn’t change when adding new drive strategies.
+
+✅ Dependency Inversion Principle:
+Vehicle depends on an abstraction (DriveStrategy) not a concrete implementation.
