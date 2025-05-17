@@ -23,7 +23,7 @@ fn checkout(price: f64, discount: &dyn Discount) -> f64 {
 }
 
 
-
+-----------------------------------------------------------------------------------------------------------------------------
 
 | Component | Role                 | Required?  | Notes                                      |
 | --------- | -------------------- | ---------- | ------------------------------------------ |
@@ -32,7 +32,7 @@ fn checkout(price: f64, discount: &dyn Discount) -> f64 {
 | `impl`    | Implementation block | ✅ Yes      | Implements methods for `struct` or `trait` |
 | `fn`      | Function/method      | ✅ Yes      | Actual logic (inside `impl` or standalone) |
 
-
+-----------------------------------------------------------------------------------------------------------------------------
 
 // 1. Define struct
 struct Invoice {
@@ -56,5 +56,41 @@ impl Printable for Invoice {
     fn print(&self) {
         println!("Total: {}", self.calculate_total());
     }
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+fn overriding in rust
+
+trait Animal {
+    fn speak(&self) {
+        println!("Some generic animal sound");
+    }
+}
+
+struct Dog;
+
+impl Animal for Dog {
+    // No speak() method here, so Dog uses the default one
+}
+
+struct Cat;
+
+impl Animal for Cat {
+    fn speak(&self) {
+        println!("Meow!");
+    }
+}
+
+fn make_sound(animal: &dyn Animal) {
+    animal.speak();
+}
+
+fn main() {
+    let dog = Dog;
+    let cat = Cat;
+
+    make_sound(&dog); // prints: Some generic animal sound
+    make_sound(&cat); // prints: Meow!
 }
 
