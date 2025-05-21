@@ -1,0 +1,41 @@
+1. Singleton Pattern ensures that only one instance of a class is created and provides a global point of access to it.
+1.1 used for only one instance of class is needed to avoid conflict
+1.2 example: logging, configuration store, db connection
+----------------------------------------------------------------------------------------
+
+2. Why use Singleton: 
+2.1 Control access to a shared resource (e.g., config, DB connection, logger)
+2.2 Prevent multiple instantiations (e.g., for performance or correctness)
+2.3 Centralized state or coordination
+----------------------------------------------------------------------------------------
+
+3.1 Private constructor (to prevent external instantiation)
+3.2 Static/global instance
+3.3 Global accessor method (e.g., get_instance())
+----------------------------------------------------------------------------------------
+
+4.1
+struct Config {
+    db_url: String,
+}
+
+4.2
+impl Config {
+    fn print(&self) {
+        println!("DB URL: {}", self.db_url);
+    }
+}
+
+4.3 Static Singleton Instance
+static CONFIG: Lazy<Config> = Lazy::new(|| {
+    println!("Creating config...");
+    Config {
+        db_url: "postgres://localhost".to_string(),
+    }
+});
+
+4.4
+fn main() {
+    CONFIG.print(); // First access: prints "Creating config..." + "DB URL..."
+    CONFIG.print(); // Second access: only prints "DB URL..."
+}
