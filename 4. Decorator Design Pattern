@@ -1,0 +1,83 @@
+1. Decorator Pattern is used to dynamically add new behavior to objects without altering their structure.
+1.1 It wraps an object with another object that "decorates" (extends) its functionality.
+1.2 Add multiple feature (multiple P&C possible)
+1.3 Avoid class explosion
+1.4 NOTE: It wraps an object with another object that adds extra behavior, forming a chain.
+→ Each decorator is-a the base type (implements same trait)
+→ Each decorator also has-a the base type (composition)
+--------------------------------------------------------------------------------------------------------------------
+
+2. Example
+2.1 Pizza and its toppings
+2.2 Coffee machine
+
+--------------------------------------------------------------------------------------------------------------------
+
+3. Abstract: BasePizza(cost) ---> P1_pizza(cost:100), P2_pizza(cost:200)
+   Abstract: Toppings(BasePizza) ---> T1_topping(base_pizza.cost()+10), T1_topping(base_pizza.cost()+20)
+   P1+T1+T2 ---> new T2 [20+..(new T1 [10+..(new P1[100]))
+
+--------------------------------------------------------------------------------------------------------------------
+
+4.1 Open/Closed Principle: Add new toppings without changing existing code.
+4.2 Single Responsibility: Each topping handles only its behavior.
+4.3 Flexible Composition: Any combination of toppings is possible without subclassing every combo.
+
+--------------------------------------------------------------------------------------------------------------------
+
+5.1 Base trait
+trait Pizza {
+    fn cost(&self) -> u32;
+}
+
+5.2. Concrete Components (Base Pizza types)
+struct Margherita; //P1
+impl Pizza for Margherita {
+    fn cost(&self) -> u32 {
+        100
+    }
+}
+struct Farmhouse; //P2
+impl Pizza for Farmhouse {
+    fn cost(&self) -> u32 {
+        200
+    }
+}
+
+5.3 Abstract Decorator
+struct ToppingDecorator {
+    pizza: Box<dyn Pizza>,
+}
+impl ToppingDecorator {
+    fn new(pizza: Box<dyn Pizza>) -> Self {
+        Self { pizza }
+    }
+}
+
+5.4 Concrete Toppings (Decorators)
+struct Cheese { //T1
+    pizza: Box<dyn Pizza>,
+}
+impl Pizza for Cheese {
+    fn cost(&self) -> u32 {
+        self.pizza.cost() + 20
+    }
+}
+
+struct Olives { //T2
+    pizza: Box<dyn Pizza>,
+}
+impl Pizza for Olives {
+    fn cost(&self) -> u32 {
+        self.pizza.cost() + 30
+    }
+}
+
+5.5 
+fn main() {
+    let basic_pizza = Box::new(Margherita);           // 100
+    let with_cheese = Box::new(Cheese { pizza: basic_pizza }); // +20
+    let with_olives = Box::new(Olives { pizza: with_cheese }); // +30
+
+    println!("Total Pizza Cost: {}", with_olives.cost()); // 150
+}
