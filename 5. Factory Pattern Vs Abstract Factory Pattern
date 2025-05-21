@@ -1,0 +1,127 @@
+1. Factory patten: used for creation of object based on some condition
+1.1 Used to avoid dupl of code for object creation at several places
+1.2 Abstarct: factory of factory
+----------------------------------------------------------------------------------------------------------------------
+
+2.1 shape(draw) --> circle(draw), square(draw)
+2.2 factory(get_shape(){switch case}) 
+----------------------------------------------------------------------------------------------------------------------
+
+3. abstract
+3.1 vehicle --> a1,a2,b1,b2
+3.2 factory1--->get vechicle ---> a1,a2,b1,b2
+3.3 factory2--->get class ----> a,b
+----------------------------------------------------------------------------------------------------------------------
+
+4.1
+trait Shape {
+    fn draw(&self);
+}
+
+4.2
+struct Circle;
+impl Shape for Circle {
+    fn draw(&self) {
+        println!("Drawing Circle");
+    }
+}
+
+struct Square;
+impl Shape for Square {
+    fn draw(&self) {
+        println!("Drawing Square");
+    }
+}
+
+4.3
+fn get_shape(shape_type: &str) -> Box<dyn Shape> {
+    match shape_type {
+        "circle" => Box::new(Circle),
+        "square" => Box::new(Square),
+        _ => panic!("Unknown shape type"),
+    }
+}
+
+4.4
+fn main() {
+    let shape1 = get_shape("circle");
+    shape1.draw(); // Drawing Circle
+
+    let shape2 = get_shape("square");
+    shape2.draw(); // Drawing Square
+}
+----------------------------------------------------------------------------------------------------------------------
+
+5.1
+trait Vehicle {
+    fn drive(&self);
+}
+
+5.2
+struct AudiA1;
+struct AudiA2;
+struct BMWB1;
+struct BMWB2;
+impl Vehicle for AudiA1 {
+    fn drive(&self) { println!("Driving Audi A1"); }
+}
+impl Vehicle for AudiA2 {
+    fn drive(&self) { println!("Driving Audi A2"); }
+}
+impl Vehicle for BMWB1 {
+    fn drive(&self) { println!("Driving BMW B1"); }
+}
+impl Vehicle for BMWB2 {
+    fn drive(&self) { println!("Driving BMW B2"); }
+}
+
+
+5.3
+trait VehicleFactory {
+    fn get_vehicle(&self, model: &str) -> Box<dyn Vehicle>;
+}
+
+
+5.4
+struct AudiFactory;
+impl VehicleFactory for AudiFactory {
+    fn get_vehicle(&self, model: &str) -> Box<dyn Vehicle> {
+        match model {
+            "a1" => Box::new(AudiA1),
+            "a2" => Box::new(AudiA2),
+            _ => panic!("Unknown Audi model"),
+        }
+    }
+}
+
+struct BMWFactory;
+impl VehicleFactory for BMWFactory {
+    fn get_vehicle(&self, model: &str) -> Box<dyn Vehicle> {
+        match model {
+            "b1" => Box::new(BMWB1),
+            "b2" => Box::new(BMWB2),
+            _ => panic!("Unknown BMW model"),
+        }
+    }
+}
+
+
+5.5
+fn get_factory(brand: &str) -> Box<dyn VehicleFactory> {
+    match brand {
+        "audi" => Box::new(AudiFactory),
+        "bmw" => Box::new(BMWFactory),
+        _ => panic!("Unknown brand"),
+    }
+}
+
+5.6
+fn main() {
+    let audi_factory = get_factory("audi");
+    let car1 = audi_factory.get_vehicle("a2");
+    car1.drive(); // Driving Audi A2
+
+    let bmw_factory = get_factory("bmw");
+    let car2 = bmw_factory.get_vehicle("b1");
+    car2.drive(); // Driving BMW B1
+}
