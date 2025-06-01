@@ -93,4 +93,16 @@ fn main() {
     make_sound(&dog); // prints: Some generic animal sound
     make_sound(&cat); // prints: Meow!
 }
+------------------------------------------------------------------------------------------------
+
+-> Abstract Class  |single inheritance  |both abs and conc fn  |extends|Animal(Cat,Dog)  |is-a
+-> Interface  |multiple inheritance|  only abs|  implements|  (Flyer,Eater)Duck|  is-a
+-> Composition/aggregation class  |another class as a field  |Car class contains engine class  |has-a
+
+-> class->abstraction class->subclass(concrete class)  |  class Payment->interface Payment strategy->class cashPayment, class creditCardPayment
+-> class->interface->implementer(concrete class)  |  class parkingLot->abstract class ParkingSpot -> class CarSpot, class BikeSpot
+
+---------------------------------------------------------------------------------------------------------
+
+
 
