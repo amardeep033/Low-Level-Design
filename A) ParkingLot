@@ -1,0 +1,7 @@
+Main Components
+1. Singleton Class Parking Lot -> Abstract Class Parking Spot -> Concrete class CarSpot, Concrete class BikeSpot
+                               -> Interface Fee Strategy -> Concrete class Hourly, Concrete class Membership
+2. Factory Class Vechicle Creation -> Abstract Class Vechile -> Concrete class Car, Concrete Class Bike
+3. Strategy Class Payment -> Interface Payment Strategy -> Concrete class Cash, Concrete Class CreditCard
+4. Observer Exit -> Payment Complete -> Vacate Spot
+
